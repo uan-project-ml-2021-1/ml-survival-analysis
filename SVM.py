@@ -1,8 +1,11 @@
 import pandas as pd
+import numpy as np
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import classification_report, confusion_matrix
 
 # Location of dataset
@@ -43,7 +46,7 @@ X_test = scalar.transform(X_test)
 # Classifier
 # 2 layers of 2 nodes each
 # MultiLayer Perceptron
-mlp = MLPClassifier(hidden_layer_sizes=(2, 2), random_state=17, max_iter=1500)
+mlp = MLPClassifier(hidden_layer_sizes=(2), random_state=0, max_iter=1500)
 # On train
 mlp.fit(X_train, y_train.values.ravel())
 
@@ -53,3 +56,17 @@ predictions = mlp.predict(X_test)
 
 print(confusion_matrix(y_test, predictions))
 print(classification_report(y_test, predictions, zero_division="warn"))
+
+# cross validation
+
+pipeline_svm_linear = Pipeline([('transformer', StandardScaler()), ('estimator', mlp)])
+
+results_column_names = ['ROC AUC', 'F1']
+results_data_frame = pd.DataFrame(columns=results_column_names)
+
+crossvalidation_scores_roc_auc = cross_val_score(mlp, X, clinicdata['Death'], cv=10, scoring='roc_auc')
+crossvalidation_scores_roc_f1 = 0.0
+
+results_data_frame.loc['Linear (k=10)'] = np.mean(crossvalidation_scores_roc_auc), crossvalidation_scores_roc_f1
+
+print(results_data_frame.to_string())
