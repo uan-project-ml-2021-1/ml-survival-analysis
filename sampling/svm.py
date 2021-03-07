@@ -73,12 +73,12 @@ def main(input_data_file_name, output_performance_metrics_file_name, output_mode
 
     values_of_independent_variables = select_features_with_pca(values_of_independent_variables,
                                                                values_of_dependent_variable, number_of_features)
-
+    # Datos a Cambiar, este grid debe ser ajustado por otro tipo de objeto
     param_grid = {'C': [0.1, 1, 10, 100],
                   'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
                   'gamma': ['scale', 'auto'],
                   'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
-
+    # Vector de soporte de clasificación debe ser cambiado por otro modelo
     grid = GridSearchCV(SVC(), param_grid, refit=True)
 
     logging.info(str(datetime.datetime.now()) + ': Started the grid search.')
