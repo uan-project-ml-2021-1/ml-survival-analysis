@@ -46,7 +46,7 @@ X_test = scalar.transform(X_test)
 # Classifier
 # 2 layers of 2 nodes each
 # MultiLayer Perceptron
-mlp = MLPClassifier(hidden_layer_sizes=(2), random_state=0, max_iter=1500)
+mlp = MLPClassifier(hidden_layer_sizes=(5, 5), random_state=17, max_iter=1500)
 # On train
 mlp.fit(X_train, y_train.values.ravel())
 
@@ -64,6 +64,7 @@ pipeline_svm_linear = Pipeline([('transformer', StandardScaler()), ('estimator',
 results_column_names = ['ROC AUC', 'F1']
 results_data_frame = pd.DataFrame(columns=results_column_names)
 
+# as K = 10
 crossvalidation_scores_roc_auc = cross_val_score(mlp, X, clinicdata['Death'], cv=10, scoring='roc_auc')
 crossvalidation_scores_roc_f1 = 0.0
 
