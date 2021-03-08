@@ -1,3 +1,7 @@
-C,10
-gamma,scale
-kernel,linear
+activation,relu
+alpha,0.0001
+hidden_layer_sizes,"(10,)"
+learning_rate,constant
+max_iter,1500
+solver,adam
+warm_start,True

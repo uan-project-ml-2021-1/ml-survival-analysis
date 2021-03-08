@@ -14,6 +14,7 @@ import csv
 import numpy
 
 from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler
@@ -74,19 +75,29 @@ def main(input_data_file_name, output_performance_metrics_file_name, output_mode
     values_of_independent_variables = select_features_with_pca(values_of_independent_variables,
                                                                values_of_dependent_variable, number_of_features)
     # Datos a Cambiar, este grid debe ser ajustado por otro tipo de objeto
-    param_grid = {'C': [0.1, 1, 10, 100],
-                  'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-                  'gamma': ['scale', 'auto'],
-                  'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
+    # param_grid = {'C': [0.1, 1, 10, 100],
+    #              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+    #              'gamma': ['scale', 'auto'],
+    #              'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}
     # Vector de soporte de clasificación debe ser cambiado por otro modelo
-    grid = GridSearchCV(SVC(), param_grid, refit=True)
+    # grid = GridSearchCV(SVC(), param_grid, refit=True)
+    parameter_space = {
+        'hidden_layer_sizes': [(1, 1, 1), (5, 10, 5), (10,)],
+        'activation': ['tanh', 'relu'],
+        'solver': ['sgd', 'adam'],
+        'alpha': [0.0001, 0.05],
+        'learning_rate': ['constant', 'adaptive'],
+        'max_iter': [1500],
+        'warm_start': [True]
+    }
+
+    grid = GridSearchCV(MLPClassifier(), parameter_space, n_jobs=-1, refit=True)
 
     logging.info(str(datetime.datetime.now()) + ': Started the grid search.')
 
     grid.fit(values_of_independent_variables, values_of_dependent_variable)
 
     logging.info(str(datetime.datetime.now()) + ': Finished the grid search.')
-
     the_best_classifier = grid.best_estimator_
 
     the_best_parameters = grid.best_params_
