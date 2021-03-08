@@ -5,25 +5,48 @@ python svm_comparison.py <name of input file> <name of output file> <name of log
 Usage examples:
 python svm.py preprocessed_data.csv svm_performance_metrics.csv model_selection_results.csv 10 svm.log
 """
+import csv
 import datetime
 import logging
 import sys
-import pandas
-import csv
 
+import matplotlib.pyplot as plt
 import numpy
-
-from sklearn.svm import SVC
+import pandas
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import RFECV
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
+from sklearn.svm import SVC
 
 
 def select_features_with_pca(data_attributes, data_labels, number_of_features):
     data_attributes = StandardScaler().fit_transform(data_attributes)
     data_attributes = PCA(n_components=number_of_features).fit_transform(data_attributes)
     return data_attributes
+
+
+# ejemplo RFE con arboles aleatorios
+def select_features_with_rfe(data_attributess, data_labels):
+    exa = RFECV(estimator=RandomForestClassifier(), cv=StratifiedKFold(10), scoring='accuracy')
+    exaww = exa.fit(data_attributess, data_labels)
+    # elimina columna no seleccionadas
+    data_attributess.drop(data_attributess.columns[numpy.where(exaww.support_ == False)[0]], axis=1, inplace=True)
+    # mostrar caracteristicas mas importantes
+    dset = pandas.DataFrame()
+    dset['attr'] = data_attributess.columns
+    dset['importance'] = exaww.estimator_.feature_importances_
+
+    dset = dset.sort_values(by='importance', ascending=False)
+
+    plt.figure(figsize=(16, 14))
+    plt.barh(y=dset['attr'], width=dset['importance'], color='#1976D2')
+    plt.title('RFECV - Feature Importances', fontsize=20, fontweight='bold', pad=20)
+    plt.xlabel('Importance', fontsize=14, labelpad=20)
+    plt.show()
 
 
 def evaluate_classifier(classifier, number_of_folds, values_of_independent_variables, values_of_dependent_variable):
