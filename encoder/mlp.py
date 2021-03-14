@@ -1,14 +1,12 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn import preprocessing
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import classification_report, confusion_matrix
-
-import sys
+from sklearn.preprocessing import StandardScaler
 
 # Location of dataset
 url_default = "https://raw.githubusercontent.com/uan-project-ml-2021-1/documentation/master/S1DataPreprocessed.csv"

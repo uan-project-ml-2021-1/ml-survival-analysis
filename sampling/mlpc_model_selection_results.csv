@@ -1,0 +1,7 @@
+activation,logistic
+alpha,0.05
+hidden_layer_sizes,18
+learning_rate,adaptive
+max_iter,1500
+solver,adam
+warm_start,True
