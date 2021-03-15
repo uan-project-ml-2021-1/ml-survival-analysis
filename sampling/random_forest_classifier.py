@@ -76,9 +76,6 @@ def evaluate_classifier(classifier, number_of_folds, values_of_independent_varia
 
 def main(input_data_file_name, output_performance_metrics_file_name, output_model_selection_file_name,
          number_of_features):
-    input_data_file_name = 'preprocessed_data.csv'
-    output_performance_metrics_file_name = 'svm_performance_metrics.csv'
-    output_model_selection_file_name = 'model_selection_results.csv'
 
     logging.info(str(datetime.datetime.now()) + ': Started.')
     training_data = pandas.read_csv(input_data_file_name)
