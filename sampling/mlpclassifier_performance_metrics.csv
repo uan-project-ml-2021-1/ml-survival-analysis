@@ -1,3 +1,0 @@
-         ROC AUC        F1  Precision    Recall  Accuracy  Balanced accuracy  Average precision
-k = 10  0.871807  0.697262   0.772605  0.684444  0.819655           0.775675           0.794104
-k = 5   0.868851  0.684662   0.732493  0.637368  0.822881           0.772442           0.776299

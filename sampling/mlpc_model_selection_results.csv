@@ -1,1 +1,0 @@
-{'activation': 'tanh','alpha': 0.1,'early_stopping': False,'hidden_layer_sizes': 25,'learning_rate': 'adaptive','learning_rate_init': 0.001, 'max_iter': 1500, 'solver': 'sgd'}number_of_features=16
