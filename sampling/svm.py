@@ -3,7 +3,7 @@ Usage:
 python svm_comparison.py <name of input file> <name of output file> <name of log file>
 
 Usage examples:
-python svm.py preprocessed_data.csv svm_performance_metrics.csv model_selection_results.csv 10 svm.log
+python svm.py preprocessed_data.csv svm_performance_metrics.csv svm_selection_results.csv 10 svm.log
 """
 import csv
 import datetime

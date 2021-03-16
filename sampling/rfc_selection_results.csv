@@ -1,0 +1,7 @@
+criterion,entropy
+max_depth,34
+max_features,sqrt
+max_leaf_nodes,17
+min_samples_split,4
+n_estimators,100
+warm_start,False
