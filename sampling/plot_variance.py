@@ -28,9 +28,8 @@ def plot_variance(data_attributes, data_labels):
     plt.show()
 
 
-input_file_name = sys.argv[1]
-
-data = pandas.read_csv(input_file_name)
+data = pandas.read_csv('preprocessed_data.csv')
+#data = pandas.read_csv('preprocessed_data_clean.csv')
 
 independent_variables = data.drop('Event', axis=1)
 dependent_variable = data['Event']

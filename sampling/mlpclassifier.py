@@ -23,30 +23,10 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
 
-def select_features_with_pca(data_attributes, data_labels, number_of_features):
+def select_features_with_pca(data_attributes, number_of_features):
     data_attributes = StandardScaler().fit_transform(data_attributes)
     data_attributes = PCA(n_components=number_of_features).fit_transform(data_attributes)
     return data_attributes
-
-
-# ejemplo RFE con arboles aleatorios
-def select_features_with_rfe(data_attributess, data_labels):
-    exa = RFECV(estimator=RandomForestClassifier(), cv=StratifiedKFold(10), scoring='accuracy')
-    exaww = exa.fit(data_attributess, data_labels)
-    # elimina columna no seleccionadas
-    data_attributess.drop(data_attributess.columns[numpy.where(exaww.support_ == False)[0]], axis=1, inplace=True)
-    # mostrar caracteristicas mas importantes
-    dset = pandas.DataFrame()
-    dset['attr'] = data_attributess.columns
-    dset['importance'] = exaww.estimator_.feature_importances_
-
-    dset = dset.sort_values(by='importance', ascending=False)
-
-    plt.figure(figsize=(16, 14))
-    plt.barh(y=dset['attr'], width=dset['importance'], color='#1976D2')
-    plt.title('RFECV - Feature Importances', fontsize=20, fontweight='bold', pad=20)
-    plt.xlabel('Importance', fontsize=14, labelpad=20)
-    plt.show()
 
 
 def evaluate_classifier(classifier, number_of_folds, values_of_independent_variables, values_of_dependent_variable):
@@ -77,7 +57,6 @@ def evaluate_classifier(classifier, number_of_folds, values_of_independent_varia
 
 def main(input_data_file_name, output_performance_metrics_file_name, output_model_selection_file_name,
          number_of_features):
-
     logging.info(str(datetime.datetime.now()) + ': Started.')
     training_data = pandas.read_csv(input_data_file_name)
 
@@ -95,13 +74,14 @@ def main(input_data_file_name, output_performance_metrics_file_name, output_mode
                                                                values_of_dependent_variable, number_of_features)
     # Datos a Cambiar, este grid debe ser ajustado por otro tipo de objeto
     parameter_space = {
-        'hidden_layer_sizes': [18],
-        'activation': ['identity', 'logistic', 'tanh', 'relu'],
-        'solver': ['sgd', 'adam'],
-        'alpha': [0.0001, 0.05],
+        'hidden_layer_sizes': [(20), (25), (9, 2)],
+        'activation': ['logistic', 'tanh', ],
+        'solver': ['lbfgs', 'sgd', 'adam'],
+        'learning_rate_init': [0.001, .1, .01],
+        'alpha': [0.0001, 0.1, 0.001],
         'learning_rate': ['constant', 'adaptive'],
-        'max_iter': [1500],
-        'warm_start': [True]
+        'max_iter': [1500, 1800],
+        'early_stopping': [True, False]
     }
     # Vector de soporte de clasificación debe ser cambiado por otro modelo
     grid = GridSearchCV(MLPClassifier(), parameter_space, n_jobs=-1, refit=True)
