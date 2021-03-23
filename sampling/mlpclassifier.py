@@ -74,14 +74,14 @@ def main(input_data_file_name, output_performance_metrics_file_name, output_mode
                                                                values_of_dependent_variable, number_of_features)
     # Datos a Cambiar, este grid debe ser ajustado por otro tipo de objeto
     parameter_space = {
-        'hidden_layer_sizes': [(20), (25), (9, 2)],
-        'activation': ['logistic', 'tanh', ],
+        'hidden_layer_sizes': [(25), (28),(30), (35)],
+        'activation': ['logistic', 'tanh'],
         'solver': ['lbfgs', 'sgd', 'adam'],
-        'learning_rate_init': [0.001, .1, .01],
-        'alpha': [0.0001, 0.1, 0.001],
+        'learning_rate_init': [0.001, .01, 0.005],
+        'alpha': [0.05, 0.1, 0.001],
         'learning_rate': ['constant', 'adaptive'],
-        'max_iter': [1500, 1800],
-        'early_stopping': [True, False]
+        'max_iter': [1500,1800,2000]
+        , 'early_stopping': [True, False]
     }
     # Vector de soporte de clasificación debe ser cambiado por otro modelo
     grid = GridSearchCV(MLPClassifier(), parameter_space, n_jobs=-1, refit=True)
