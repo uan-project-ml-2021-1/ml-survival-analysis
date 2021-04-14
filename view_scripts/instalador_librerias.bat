@@ -17,4 +17,3 @@ ECHO ============================
 ECHO Instalacion de librerias finalizada
 ECHO ============================
 PAUSE
-START CMD
