@@ -1,7 +1,7 @@
 """
 Usage:
-trabajo de grado, uso de modelo SVM de machine Learning para la prediccion de
-insuficiencia cardiaca usando datos clinicos
+trabajo de grado, uso de modelo redes neuronales mlp(Multi-layer Perceptron) de
+machine Learning para la prediccion de insuficiencia cardiaca usando datos clinicos
 contenidos en los archivos  preprocessed_data y preprocessed_data_clean
 
 autors David Gallego, Delly Lucas
@@ -15,8 +15,8 @@ import pandas
 from sklearn.decomposition import PCA
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
+from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
 
 
 # funcion encargada de realizar una seleccion de atributos usando Principal component analysis (PCA)
@@ -28,7 +28,7 @@ def select_features_with_pca(data_attributes, number_of_features):
 
 # funcion encargada de crear una vista con un texto y un lugar como datos de entrada
 def createLabel(text, Height_text):
-    canvas.create_window(400, Height_text,
+    canvas.create_window(650, Height_text,
                          window=tk.Label(root, text=text, fg='green', font=('helvetica', 12, 'bold')))
 
 
@@ -70,15 +70,20 @@ def main(number_of_features):
     # Obtiene los valores de la variable independiente "el evento de muerte"
     values_of_dependent_variable = training_data['Event']
 
-    values_of_independent_variables = select_features_with_pca(values_of_independent_variables,
-                                                               number_of_features)
+    values_of_independent_variables = select_features_with_pca(values_of_independent_variables, number_of_features)
 
-    param_grid = {'C': [1],
-                  'gamma': ['auto'],
-                  'class_weight': ['balanced'],
-                  'kernel': ['rbf']}
+    param_grid = {
+        'hidden_layer_sizes': [30],
+        'activation': ['tanh'],
+        'solver': ['sgd'],
+        'learning_rate_init': [0.001],
+        'alpha': [0.001],
+        'learning_rate': ['constant', 'adaptive'],
+        'max_iter': [1800]
+        , 'early_stopping': [False]
+    }
 
-    grid = GridSearchCV(SVC(), param_grid, n_jobs=-1, refit=True)
+    grid = GridSearchCV(MLPClassifier(), param_grid, n_jobs=-1, refit=True)
 
     grid.fit(values_of_independent_variables, values_of_dependent_variable)
 
@@ -88,7 +93,7 @@ def main(number_of_features):
     the_best_parameters = grid.best_params_
 
     createLabel(the_best_classifier, 100)
-    createLabel(the_best_parameters, 120)
+    createLabel(the_best_parameters, 140)
 
     results_column_names = ['ROC AUC', 'F1', 'Precision', 'Recall', 'Accuracy', 'Balanced accuracy',
                             'Average precision']
@@ -98,7 +103,6 @@ def main(number_of_features):
     performance_of_best_classifier_10_folds = evaluate_classifier(the_best_classifier, 10,
                                                                   values_of_independent_variables,
                                                                   values_of_dependent_variable)
-
     results_data_frame.loc['k = 10'] = performance_of_best_classifier_10_folds
 
     createLabel(results_data_frame.to_string(), 220)
@@ -107,10 +111,10 @@ def main(number_of_features):
 
 # inicializador de la ventana para visualizar los resultados
 root = tk.Tk()
-canvas = tk.Canvas(root, width=800, height=350)
+canvas = tk.Canvas(root, width=1400, height=350)
 canvas.pack()
 
-number_of_features = 6
+number_of_features = 11
 main(number_of_features)
 
 root.mainloop()
