@@ -10,7 +10,6 @@ autors David Gallego, Delly Lucas
 import datetime
 import tkinter as tk
 
-import matplotlib.pyplot as plt
 import numpy
 import pandas
 from sklearn.decomposition import PCA
@@ -40,12 +39,6 @@ def select_features_with_rfe(data_attributess, data_labels):
     dset['importance'] = exaww.estimator_.feature_importances_
 
     dset = dset.sort_values(by='importance', ascending=False)
-
-    plt.figure(figsize=(16, 14))
-    plt.barh(y=dset['attr'], width=dset['importance'], color='#1976D2')
-    plt.title('RFECV - Feature Importances', fontsize=20, fontweight='bold', pad=20)
-    plt.xlabel('Importance', fontsize=14, labelpad=20)
-    plt.show()
 
 
 def evaluate_classifier(classifier, number_of_folds, values_of_independent_variables, values_of_dependent_variable):
